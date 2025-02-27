@@ -126,6 +126,7 @@ public:
 
 
     void pop_back() {
+        if (sz == 0) throw std::logic_error("error");
         node<type>* temp = first;
         for (size_t i = 0; i < (sz - 1); ++i) {
             temp = temp->next;
@@ -136,6 +137,7 @@ public:
     }
 
     void pop_front() {
+        if (sz == 0) throw std::logic_error("error");
         if (first == NULL) throw std::logic_error("error");
         node<type>* temp = first->next;
         delete first;
@@ -146,7 +148,9 @@ public:
 
     type& remove(size_t num) {
         type temp_val;
-
+        if (num>= sz) throw std::logic_error("error");
+        if (num<0) throw  std::logic_error("error");
+        if (sz == 0) throw std::logic_error("error");
         if (num == 0) {
             temp_val = first->value;
             pop_front();
@@ -168,6 +172,7 @@ public:
 
     type& operator[](size_t num) {
         if ((num >= sz)&&(CheckCycles()==false)) throw std::logic_error("error");
+        if (num<0) throw std::logic_error("error");
         node<type>* temp = first;
         for (size_t i = 0; i < num; ++i) {
             temp = temp->next;
@@ -176,6 +181,7 @@ public:
     }
 
     void MakeCycle(size_t from, size_t to) {
+        if (from>=sz || from<0 || to<0 || to>=sz) throw std::logic_error("error");
         if (from < to) throw std::logic_error("something wrong with cycle");
         node<type>* temp = first;
         node<type>* temp2 = first;

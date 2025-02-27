@@ -221,7 +221,7 @@ TEST(TranslatorTest, MixedTerms) {
     EXPECT_EQ(p.GetMonom(3).getK(), -4.0);
 }
 
-TEST(TranslatorTest, AdditionalTest1) {
+TEST(PolynomTest, AdditionalTest1) {
     std::vector<Term*> terms1 = String_To_Terms("2*x^2 + 3*y^3 - 4*z^4");
     Polynom p1 = TermsToPolyom(terms1);
 
@@ -240,7 +240,7 @@ TEST(TranslatorTest, AdditionalTest1) {
     EXPECT_EQ(p3.GetMonom(3).getK(), -8.0);
 }
 
-TEST(TranslatorTest, AdditionalTest2) {
+TEST(PolynomTest, AdditionalTest2) {
     std::vector<Term*> terms1 = String_To_Terms("1x^2 + 1y^2 + 1z^2");
     Polynom p1 = TermsToPolyom(terms1);
 
