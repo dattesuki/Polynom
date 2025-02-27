@@ -221,3 +221,40 @@ TEST(TranslatorTest, MixedTerms) {
     EXPECT_EQ(p.GetMonom(3).getK(), -4.0);
 }
 
+TEST(TranslatorTest, AdditionalTest1) {
+    std::vector<Term*> terms1 = String_To_Terms("2*x^2 + 3*y^3 - 4*z^4");
+    Polynom p1 = TermsToPolyom(terms1);
+
+    std::vector<Term*> terms2 = String_To_Terms("2*x^2 + 3*y^3 - 4*z^4");
+    Polynom p2 = TermsToPolyom(terms2);
+
+    Polynom p3 = p1 + p2;
+    
+    EXPECT_EQ(p3.GetMonom(1).getDegree(), 200);
+    EXPECT_EQ(p3.GetMonom(1).getK(), 4.0);
+
+    EXPECT_EQ(p3.GetMonom(2).getDegree(), 30);
+    EXPECT_EQ(p3.GetMonom(2).getK(), 6.0);
+
+    EXPECT_EQ(p3.GetMonom(3).getDegree(), 4);
+    EXPECT_EQ(p3.GetMonom(3).getK(), -8.0);
+}
+
+TEST(TranslatorTest, AdditionalTest2) {
+    std::vector<Term*> terms1 = String_To_Terms("1x^2 + 1y^2 + 1z^2");
+    Polynom p1 = TermsToPolyom(terms1);
+
+    std::vector<Term*> terms2 = String_To_Terms("1x^2 + 1y^2 + 1z^2");
+    Polynom p2 = TermsToPolyom(terms2);
+
+    Polynom p3 = p1 + p2;
+
+    EXPECT_EQ(p3.GetMonom(1).getDegree(), 200);
+    EXPECT_EQ(p3.GetMonom(1).getK(), 2.0);
+
+    EXPECT_EQ(p3.GetMonom(2).getDegree(), 20);
+    EXPECT_EQ(p3.GetMonom(2).getK(), 2.0);
+
+    EXPECT_EQ(p3.GetMonom(3).getDegree(), 2);
+    EXPECT_EQ(p3.GetMonom(3).getK(), 2.0);
+}

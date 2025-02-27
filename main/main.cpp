@@ -10,16 +10,15 @@ int main() {
     vector<float> c = { 1,2 };
     list<float> a(c);
     
-    Polynom p1;
-    p1 = TermsToPolyom(String_To_Terms("1yz + 2x"));
 
+    std::vector<Term*> terms1 = String_To_Terms("x^2 + y^2 + z^2");
+    Polynom p1 = TermsToPolyom(terms1);
 
-    Polynom p2;
-    p2 = TermsToPolyom(String_To_Terms("1y"));
-    
-    cout << p1 << endl;
-    cout << p2 << endl;
-    Polynom p3;
+    std::vector<Term*> terms2 = String_To_Terms("x^2 + y^2 + z^2");
+    Polynom p2 = TermsToPolyom(terms2);
+
+    Polynom p3 = p1 + p2;
+
     p3 = (p1 + p2);
     cout << p3 << endl;
     p3 = (p1 * p2);

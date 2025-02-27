@@ -129,15 +129,15 @@ public:
         it1++;
         it2++;
         while ((it1 != it1.end()) && (it2 != it2.end())) {
-            if (it1.value()->degree == it2.value()->degree) {
-                res.push_back((*(it1.value()) + *(it2.value())));
+            if (it1.value()->getDegree() == it2.value()->getDegree()) {
+                res.add((*(it1.value()) + *(it2.value())));
                 it1++; it2++;
             }
             else {
-                if (it1.value()->degree > it2.value()->degree) {
-                    res.push_back(*(it1++.value()));
+                if (it1.value()->getDegree() > it2.value()->getDegree()) {
+                    res.add(*(it1++.value()));
                 }
-                else res.push_back(*(it2++.value()));
+                else res.add(*(it2++.value()));
             }
         }
 
