@@ -136,9 +136,9 @@ public:
             }
             else {
                 if (it1.value()->getDegree() > it2.value()->getDegree()) {
-                    res.add(*(++it1.value()));
+                    res.add(*(it1++.value()));
                 }
-                else res.add(*(++it2.value()));
+                else res.add(*(it2++.value()));
             }
         }
 

@@ -126,12 +126,9 @@ public:
 
     void insert(const type& value, node<type>* n) {
         //if ((num > sz) || (num < 0)) throw std::logic_error("error");
-        if (n == nullptr) push_back(value);
+        if (n == nullptr) push_front(value);
         else {
-            node<type>* temp = first;
-            while (temp != n) {
-                temp = temp->next;
-            }
+            node<type>* temp = n;
             node<type>* temp2 = temp->next;
             temp->next = new node<type>(value);
             temp->next->next = temp2;
@@ -165,7 +162,7 @@ public:
         if (n == nullptr) throw std::logic_error("error");
         node<type>* temp = first;
         while (temp != n) temp = temp->next;
-        if (temp->next == nullptr) pop_back();
+        if (temp->next == nullptr) pop_front();
         else {
             node<type>* temp2 = temp->next->next;
             delete temp->next;

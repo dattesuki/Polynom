@@ -146,8 +146,8 @@ TEST(ListTest, RemoveAtEnd) {
     temp = temp->GetNext();
     l.remove(temp);
     EXPECT_EQ(l.GetSize(), 2);
-    EXPECT_EQ(l[0], 1);
-    EXPECT_EQ(l[1], 2);
+    EXPECT_EQ(l[0], 2);
+    EXPECT_EQ(l[1], 3);
 }
 
 
