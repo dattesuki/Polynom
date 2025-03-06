@@ -136,17 +136,27 @@ public:
             }
             else {
                 if (it1.value()->getDegree() > it2.value()->getDegree()) {
-                    res.add(*(it1++.value()));
+                    res.add(*(it1.value()));
+                    ++it1;
                 }
-                else res.add(*(it2++.value()));
+                else {
+                    res.add(*(it2.value()));
+                    ++it2;
+                }
             }
         }
 
         if (it1 == List.end()) {
-            while (it2 != p.List.end()) res.List.push_back(++it2.value());
+            while (it2 != p.List.end()) {
+                res.List.push_back(it2.value());
+                ++it2;
+            }
         }
         if (it2 == p.List.end()) {
-            while (it1 != List.end()) res.List.push_back(++it1.value());
+            while (it1 != List.end()) {
+                res.List.push_back(it1.value());
+                ++it1;
+            }
         }
         
         return res;

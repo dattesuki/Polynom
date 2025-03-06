@@ -160,8 +160,8 @@ public:
 
     void remove(node<type>* n) {
         if (n == nullptr) throw std::logic_error("error");
-        node<type>* temp = first;
-        while (temp != n) temp = temp->next;
+        node<type>* temp = n;
+        //while (temp != n) temp = temp->next;
         if (temp->next == nullptr) pop_front();
         else {
             node<type>* temp2 = temp->next->next;
