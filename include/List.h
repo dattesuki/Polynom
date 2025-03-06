@@ -437,7 +437,7 @@ public:
 
     
     iterator begin() { 
-        iterator temp(list.first);
+        iterator temp(first);
         return temp; 
     }
 
