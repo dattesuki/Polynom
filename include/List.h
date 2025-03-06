@@ -133,7 +133,7 @@ public:
                 temp = temp->next;
             }
             node<type>* temp2 = temp->next;
-            temp->next = new Node<type>(value);
+            temp->next = new node<type>(value);
             temp->next->next = temp2;
             ++sz;
         }
@@ -436,12 +436,13 @@ public:
     }
 
     
-    list<type>::iterator begin() { 
-        list<type>::iterator temp(list.first);
+    iterator begin() { 
+        iterator temp(list.first);
         return temp; 
     }
-    list<type>::iterator end() { 
-        list<type>::iterator temp(nullptr);
+
+    iterator end() { 
+        iterator temp(nullptr);
         return temp; 
     }
 
@@ -457,26 +458,7 @@ size_t size(const list<type>& A) {
 }
 
 
-//Слияние упорядоченных массивов
-template <typename type>
-list<type> merge(list<type>& a, list<type>& b, list<type>& c) {
-    list<type>::iterator it_a(a.begin());
-    list<type>::iterator it_b(b.begin());
-    list<type>::iterator it_c(c.begin());
-    while (c.GetSize() != 0) c.pop_front();
-    size_t na = a.GetSize();
-    size_t nb = b.GetSize();
-    size_t i;
-    size_t j;
-    for (i = 0, j = 0; ((i < na) && (j < nb));) {
-        if (a[i] < b[j]) c.push_back(a[i++]);
-        else c.push_back(b[j++]);
-    }
-    for (; i < na; i++) c.push_back(a[i]);
-    for (; j < nb; j++) c.push_back(b[j]);
-    c.pop_front();
-    return c;
-}
+
 
 
 
