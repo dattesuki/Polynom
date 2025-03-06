@@ -126,14 +126,14 @@ public:
 
     void insert(const type& value, node<type>* n) {
         //if ((num > sz) || (num < 0)) throw std::logic_error("error");
-        if (n == null) push_back(value);
+        if (n == nullptr) push_back(value);
         else {
             node<type>* temp = first;
             while (temp != n) {
                 temp = temp->next;
             }
             node<type>* temp2 = temp->next;
-            temp->next = new Node(value);
+            temp->next = new Node<type>(value);
             temp->next->next = temp2;
             ++sz;
         }
@@ -179,7 +179,6 @@ public:
         if (num<0) throw  std::logic_error("error");
         if (sz == 0) throw std::logic_error("error");
         if (num == 0) {
-            temp_val = first->value;
             pop_front();
         }
         else {
@@ -190,7 +189,6 @@ public:
                 temp = temp->next;
             }
             temp2 = temp->next->next;
-            temp_val = temp->next->value;
             delete temp->next;
             temp->next = temp2;
         }
@@ -438,8 +436,14 @@ public:
     }
 
     
-    list<type>::iterator begin() { return list<type>::iterator(list.first); }
-    list<type>::iterator end() { return list<type>::iterator(nullptr); }
+    list<type>::iterator begin() { 
+        list<type>::iterator temp(list.first);
+        return temp; 
+    }
+    list<type>::iterator end() { 
+        list<type>::iterator temp(nullptr);
+        return temp; 
+    }
 
 
     
