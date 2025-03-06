@@ -80,7 +80,8 @@ private:
 public:
     Polynom():List(){
         List.push_back(new Monom());
-        List.MakeCycle(List.GetSize() - 1, 0);
+        List.GetFirst()->next = List.GetFirst();
+        //List.MakeCycle(List.GetSize() - 1, 0);
     }
     
     void push_back(const Monom& m) {
@@ -101,7 +102,7 @@ public:
                 return;
             }
         }
-        List.insert(new Monom(m),i);
+        List.add(new Monom(m),i);
     }
 
     ~Polynom(){
@@ -124,28 +125,28 @@ public:
    
     Polynom operator+(Polynom& p) {
         Polynom res;
-        list<Monom*>::iterator it1(List);
-        list<Monom*>::iterator it2(p.List);
-        it1++;
-        it2++;
-        while ((it1 != it1.end()) && (it2 != it2.end())) {
+        list<Monom*>::iterator it1(List.GetFirst());
+        list<Monom*>::iterator it2(p.List.GetFirst());
+        ++it1;
+        ++it2;
+        while ((it1 != List.end()) && (it2 != p.List.end())) {
             if (it1.value()->getDegree() == it2.value()->getDegree()) {
                 res.add((*(it1.value()) + *(it2.value())));
-                it1++; it2++;
+                ++it1; ++it2;
             }
             else {
                 if (it1.value()->getDegree() > it2.value()->getDegree()) {
-                    res.add(*(it1++.value()));
+                    res.add(*(++it1.value()));
                 }
-                else res.add(*(it2++.value()));
+                else res.add(*(++it2.value()));
             }
         }
 
-        if (it1 == it1.end()) {
-            while (it2 != it2.end()) res.List.push_back(it2++.value());
+        if (it1 == List.end()) {
+            while (it2 != p.List.end()) res.List.push_back(++it2.value());
         }
-        if (it2 == it2.end()) {
-            while (it1 != it1.end()) res.List.push_back(it1++.value());
+        if (it2 == p.List.end()) {
+            while (it1 != List.end()) res.List.push_back(++it1.value());
         }
         
         return res;
@@ -153,16 +154,16 @@ public:
 
     Polynom operator*(Polynom& p) {
         Polynom res;
-        list<Monom*>::iterator it1(List);
-        list<Monom*>::iterator it2(p.List);
-        it1++;
-        it2++;
+        list<Monom*>::iterator it1(List.GetFirst());
+        list<Monom*>::iterator it2(p.List.GetFirst());
+        ++it1;
+        ++it2;
         //naive algorithm
-        for (; it1 != it1.end(); it1++) {
-            it2 = list<Monom*>::iterator (p.List);
-            it2++;
-            for (; it2 != it2.end(); it2++) {
-                res.add((*(it1.value())) * (*(it2.value())));
+        for (; it1 != List.end(); ++it1) {
+            it2 = list<Monom*>::iterator (p.List.GetFirst());
+            ++it2;
+            for (; it2 != p.List.end(); ++it2) {
+                res.add(*(*it1) * *(*it2));
             }
         }
         
@@ -172,9 +173,9 @@ public:
 
     
     friend std::ostream& operator<<(std::ostream& os, Polynom& right) {
-        list<Monom*>::iterator it(right.List);
-        it++;
-        while(it != it.end()) {
+        list<Monom*>::iterator it(right.List.GetFirst());
+        ++it;
+        while(it != right.List.end()) {
             os << it.value()->getK();
             if (it.value()->x_deg() != 0) {
                 os << "*x^" << it.value()->x_deg();
@@ -185,7 +186,7 @@ public:
             if (it.value()->z_deg() != 0) {
                 os << "*z^" << it.value()->z_deg();
             }
-            if (++it != it.end()) os << " + ";
+            if (++it != right.List.end()) os << " + ";
         }
         return os;
     }

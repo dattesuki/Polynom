@@ -16,14 +16,12 @@ class Polynom;
 
 template <typename type>
 struct node {
+
 public:
     node* next = NULL;
     type value = type();
 
-    type& GetValue() { return value; }
-
     node(const type& _value = type(), node* _next = NULL) :value(_value), next(_next) {}
-
     node* GetNext() {
         if (next == NULL) throw std::logic_error("no next");
         return next;
@@ -37,7 +35,6 @@ public:
         return *this;
     }
 
-    friend class list<type>;
 };
 
 
@@ -98,8 +95,11 @@ public:
     }
 
 
+    node<type>* GetFirst() { return first; }
+
     //
-    void insert(const type& value, size_t num) {
+
+    void add(const type& value, size_t num) {
         if ((num > sz) || (num < 0)) throw std::logic_error("error");
 
         if (num == sz) push_back(value);
@@ -124,6 +124,22 @@ public:
         }
     }
 
+    void insert(const type& value, node<type>* n) {
+        //if ((num > sz) || (num < 0)) throw std::logic_error("error");
+        if (n == null) push_back(value);
+        else {
+            node<type>* temp = first;
+            while (temp != n) {
+                temp = temp->next;
+            }
+            node<type>* temp2 = temp->next;
+            temp->next = new Node(value);
+            temp->next->next = temp2;
+            ++sz;
+        }
+    }
+
+
 
     void pop_back() {
         if (sz == 0) throw std::logic_error("error");
@@ -145,9 +161,20 @@ public:
         --sz;
     }
 
+    void remove(node<type>* n) {
+        if (n == nullptr) throw std::logic_error("error");
+        node<type>* temp = first;
+        while (temp != n) temp = temp->next;
+        if (temp->next == nullptr) pop_back();
+        else {
+            node<type>* temp2 = temp->next->next;
+            delete temp->next;
+            temp->next = temp2;
+            sz--;
+        }
+    }
 
-    type& remove(size_t num) {
-        type temp_val;
+    void del(size_t num) {
         if (num>= sz) throw std::logic_error("error");
         if (num<0) throw  std::logic_error("error");
         if (sz == 0) throw std::logic_error("error");
@@ -167,7 +194,6 @@ public:
             delete temp->next;
             temp->next = temp2;
         }
-        return temp_val;
     }
 
     type& operator[](size_t num) {
@@ -179,7 +205,7 @@ public:
         }
         return temp->value;
     }
-
+    /*
     void MakeCycle(size_t from, size_t to) {
         if (from>=sz || from<0 || to<0 || to>=sz) throw std::logic_error("error");
         if (from < to) throw std::logic_error("something wrong with cycle");
@@ -189,7 +215,7 @@ public:
         for (size_t i = 0; i < from; ++i) temp2 = temp2->next;
         temp2->next = temp;
 
-    }
+    }*/
 
     bool CheckCycles() const{
         node<type>* slow = first;
@@ -308,20 +334,15 @@ public:
 
     class iterator {
     protected:
-        list<type>* List;
+        //list<type>* List;
         node<type>* now;
-        size_t n;
     public:
-        iterator(list<type>& l, size_t num = 0):List(&l),now(l.first), n(num) {
-            if ((List->CheckCycles()==false) && (num>List->GetSize())) throw std::logic_error("error");
-            for (size_t i = 0; i < num; ++i) now = now->next;
+        iterator(node<type>* n):now(n) {
         }
         
         list<type>::iterator& operator=(const list<type>::iterator& right) {
             if (this != (&right)) {
-                List = right.List;
                 now = right.now;
-                n = right.n;
             }
             return *this;
         }
@@ -329,13 +350,13 @@ public:
         operator node<type>*() const { return now; }
         node<type>* now_ptr() const { return now; }
 
-        node<type>* begin() { return first; }
+        //node<type>* begin() { return first; }
         node<type>* pt_now() { return now; }
-        node<type>* end() {
-            if (List->CheckCycles() == true) return List->GoBack();
-            return NULL;
-        }
-
+        //node<type>* end() {
+        //    if (List->CheckCycles() == true) return List->GoBack();
+        //    return NULL;
+        //}
+        node<type>* operator->() { return now->next; }
         node<type>* next() { return now->next; }
 
         type& value() const
@@ -351,7 +372,6 @@ public:
         list<type>::iterator& operator++() {
             if (now == NULL) throw std::logic_error("error");
             now = now->next;
-            n++;
             return *this;
         }
 
@@ -361,7 +381,7 @@ public:
             return temp;
         }
         
-        list<type>::iterator& operator--() {
+        /*list<type>::iterator& operator--() {
             if ((now==List->first)&&(List->CheckCycles() == false)) throw std::logic_error("error");
             node<type>* temp = now;
             now = List->first;
@@ -370,16 +390,16 @@ public:
             }
             n--;
             return *this;
-        }
+        }*/
 
-        list<type>::iterator& operator--(int) {
+        /*list<type>::iterator& operator--(int) {
             list<type>::iterator temp = *this;
             --*this;
             return temp;
-        }
+        */
         
         bool operator==(const list<type>::iterator& right) {
-            if ((now == right.now)&&(List==right.List)) return true;
+            if (now == right.now) return true;
             else return false;
         }
 
@@ -416,23 +436,12 @@ public:
             return it.now_ptr();
         }
     }
-    //Слияние упорядоченных массивов
-    friend list<type> merge(list& a, list& b, list& c) {
-        while (c.GetSize() != 0) c.pop_front();
-        size_t na = a.sz;
-        size_t nb = b.sz;
-        size_t i;
-        size_t j;
-        for (i = 0, j = 0; ((i < na) && (j < nb));) {
-            if (a[i] < b[j]) c.push_back(a[i++]);
-            else c.push_back(b[j++]);
-        }
-        for (; i < na; i++) c.push_back(a[i]);
-        for (; j < nb; j++) c.push_back(b[j]);
-        c.pop_front();
-        return c;
-    }
+
     
+    list<type>::iterator begin() { return list<type>::iterator(list.first); }
+    list<type>::iterator end() { return list<type>::iterator(nullptr); }
+
+
     
 };
 
@@ -443,6 +452,27 @@ size_t size(const list<type>& A) {
     return A.GetSize();
 }
 
+
+//Слияние упорядоченных массивов
+template <typename type>
+list<type> merge(list<type>& a, list<type>& b, list<type>& c) {
+    list<type>::iterator it_a(a.begin());
+    list<type>::iterator it_b(b.begin());
+    list<type>::iterator it_c(c.begin());
+    while (c.GetSize() != 0) c.pop_front();
+    size_t na = a.GetSize();
+    size_t nb = b.GetSize();
+    size_t i;
+    size_t j;
+    for (i = 0, j = 0; ((i < na) && (j < nb));) {
+        if (a[i] < b[j]) c.push_back(a[i++]);
+        else c.push_back(b[j++]);
+    }
+    for (; i < na; i++) c.push_back(a[i]);
+    for (; j < nb; j++) c.push_back(b[j]);
+    c.pop_front();
+    return c;
+}
 
 
 

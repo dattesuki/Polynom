@@ -15,6 +15,15 @@ TEST(ListTest, PushBack) {
     EXPECT_EQ(l[1], 2);
 }
 
+TEST(ListTest, ConstructorByVector) {
+    std::vector<int> v = { 2,1 };
+    list<int> l(v);
+    EXPECT_EQ(l.GetSize(), 2);
+    EXPECT_EQ(l[0], 2);
+    EXPECT_EQ(l[1], 1);
+    ASSERT_ANY_THROW(l[3]);
+}
+
 TEST(ListTest, PushFront) {
     list<int> l;
     l.push_front(1);
@@ -24,11 +33,11 @@ TEST(ListTest, PushFront) {
     EXPECT_EQ(l[1], 1);
 }
 
-TEST(ListTest, Insert) {
+TEST(ListTest, Add) {
     list<int> l;
     l.push_back(1);
     l.push_back(3);
-    l.insert(2, 1);
+    l.add(2, 1);
     EXPECT_EQ(l.GetSize(), 3);
     EXPECT_EQ(l[0], 1);
     EXPECT_EQ(l[1], 2);
@@ -58,39 +67,20 @@ TEST(ListTest, Remove) {
     l.push_back(1);
     l.push_back(2);
     l.push_back(3);
-    l.remove(1);
+    node<int>* temp = l.GetFirst();
+    l.remove(temp);
     EXPECT_EQ(l.GetSize(), 2);
     EXPECT_EQ(l[0], 1);
     EXPECT_EQ(l[1], 3);
 }
 
-TEST(ListTest, MakeCycle) {
-    list<int> l;
-    l.push_back(1);
-    l.push_back(2);
-    l.push_back(3);
-    l.MakeCycle(2, 0);
-    EXPECT_TRUE(l.CheckCycles());
-}
-
-TEST(ListTest, CheckCycle) {
-    list<int> l;
-    l.push_back(1);
-    l.push_back(2);
-    l.push_back(3);
-    l.MakeCycle(2, 0);
-    EXPECT_EQ(l[0], 1);
-    EXPECT_EQ(l[1], 2);
-    EXPECT_EQ(l[2], 3);
-    EXPECT_EQ(l[3], 1);
-}
 
 TEST(ListTest, Iterator) {
     list<int> l;
     l.push_back(1);
     l.push_back(2);
     l.push_back(3);
-    list<int>::iterator it = l;
+    list<int>::iterator it = l.GetFirst();
     EXPECT_EQ(*it, 1);
     ++it;
     EXPECT_EQ(*it, 2);
@@ -122,38 +112,28 @@ TEST(ListTest, AssignmentOperator) {
 
 
 
-TEST(ListTest, InsertAtBeginning) {
+TEST(ListTest, AddAtBeginning) {
     list<int> l;
     l.push_back(2);
     l.push_back(3);
-    l.insert(1, 0);
+    l.add(1, 0);
     EXPECT_EQ(l.GetSize(), 3);
     EXPECT_EQ(l[0], 1);
     EXPECT_EQ(l[1], 2);
     EXPECT_EQ(l[2], 3);
 }
 
-TEST(ListTest, InsertAtEnd) {
+TEST(ListTest, AddAtEnd) {
     list<int> l;
     l.push_back(1);
     l.push_back(2);
-    l.insert(3, 2);
+    l.add(3, 2);
     EXPECT_EQ(l.GetSize(), 3);
     EXPECT_EQ(l[0], 1);
     EXPECT_EQ(l[1], 2);
     EXPECT_EQ(l[2], 3);
 }
 
-TEST(ListTest, RemoveAtBeginning) {
-    list<int> l;
-    l.push_back(1);
-    l.push_back(2);
-    l.push_back(3);
-    l.remove(0);
-    EXPECT_EQ(l.GetSize(), 2);
-    EXPECT_EQ(l[0], 2);
-    EXPECT_EQ(l[1], 3);
-}
 
 
 TEST(ListTest, RemoveAtEnd) {
@@ -161,22 +141,15 @@ TEST(ListTest, RemoveAtEnd) {
     l.push_back(1);
     l.push_back(2);
     l.push_back(3);
-    l.remove(2);
+    node<int>* temp = l.GetFirst();
+    temp = temp->GetNext();
+    temp = temp->GetNext();
+    l.remove(temp);
     EXPECT_EQ(l.GetSize(), 2);
     EXPECT_EQ(l[0], 1);
     EXPECT_EQ(l[1], 2);
 }
 
-TEST(ListTest, RemoveInMiddle) {
-    list<int> l;
-    l.push_back(1);
-    l.push_back(2);
-    l.push_back(3);
-    l.remove(1);
-    EXPECT_EQ(l.GetSize(), 2);
-    EXPECT_EQ(l[0], 1);
-    EXPECT_EQ(l[1], 3);
-}
 
 TEST(ListTest, LenCycleNoCycle) {
     list<int> l;
@@ -191,8 +164,8 @@ TEST(ListTest, IteratorEquality) {
     list<int> l;
     l.push_back(1);
     l.push_back(2);
-    list<int>::iterator it1 = l;
-    list<int>::iterator it2 = l;
+    list<int>::iterator it1 = l.GetFirst();
+    list<int>::iterator it2 = l.GetFirst();
     EXPECT_TRUE(it1 == it2);
     ++it1;
     EXPECT_FALSE(it1 == it2);
